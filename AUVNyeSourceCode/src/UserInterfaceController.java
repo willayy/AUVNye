@@ -8,8 +8,6 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -17,7 +15,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class UserInterfaceController implements Initializable {
@@ -83,119 +80,116 @@ public class UserInterfaceController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         
-        terpHyperLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    Desktop.getDesktop().browse(new URI("https://www.investopedia.com/terms/t/theoreticalexrightsprice.asp"));
-                } catch (IOException e) {
-                    System.out.println("Page not found");
-                } catch (URISyntaxException e) {
-                    System.out.println("Page not found");
-                }
-            }
-        });
+        terpHyperLink.setOnMouseClicked(mouseEvent -> terpLink());
 
-        dilutedEpsHyperLink.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                try {
-                    Desktop.getDesktop().browse(new URI("https://www.investopedia.com/terms/d/dilutedeps.asp"));
-                } catch (IOException e) {
-                    System.out.println("Page not found");
-                } catch (URISyntaxException e) {
-                    System.out.println("Page not found");
-                }
-            }
-            
-        });
+        dilutedEpsHyperLink.setOnMouseClicked(mouseEvent -> depsLink());
         
-        calculateTERPBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                try {
-                    s0 = Double.parseDouble(s0Field.getText());
-                    s1 = Double.parseDouble(s1Field.getText());
-                    p0 = Double.parseDouble(p0Field.getText());
-                    p1 = Double.parseDouble(p1Field.getText());
-                } catch (Exception e) {
-                    resultFieldTERP.setText("ERROR");
-                }
+        calculateTERPBtn.setOnAction(action -> calculateTERP());
 
-                double result = ((s0*1000) * p0 + (s1*1000) * p1) / (s0 + s1);
+        calculateDEPSBtn.setOnAction(action -> caclulateDEPS());
 
-                String resultString = decfor.format(result);
+        calculateNewEPSBtn.setOnAction(action -> calculateNEPS());
 
-                resultFieldTERP.setText(resultString);
-                StringSelection stringSelection = new StringSelection(resultString);
-                java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, null);
-            }
-        });
+        depsPane.addEventHandler(KeyEvent.KEY_PRESSED, this::keyFireDEPS);
 
-        calculateDEPSBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                try {
-                    eps0 = Double.parseDouble(eps0Field.getText());
-                    eps2 = Double.parseDouble(eps2Field.getText());
-                } catch (Exception e) {
-                    resultFieldDEPS.setText("ERROR");
-                }
+        terpPane.addEventHandler(KeyEvent.KEY_PRESSED, this::keyFireTERP);
 
-                double result = ((eps0-eps2) / (eps0*2));
+        nepsPane.addEventHandler(KeyEvent.KEY_PRESSED, this::keyfireNEPS);
+    }
 
-                String resultString = decfor.format(result);
 
-                resultFieldDEPS.setText(resultString);
-                StringSelection stringSelection = new StringSelection(resultString);
-                java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, null);
-            }
-        });
+    private void keyfireNEPS(KeyEvent ev) {
+        if (ev.getCode() == KeyCode.ENTER) {
+            calculateNewEPSBtn.fire();
+            ev.consume(); 
+        }
+    }
 
-        calculateNewEPSBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent arg0) {
-                try {
-                    oldEps = Double.parseDouble(oldEpsField.getText());
-                    sharesBefore = Double.parseDouble(sharesBeforeField.getText());
-                    sharesAfter = Double.parseDouble(sharesAfterField.getText());
-                } catch (Exception e) {
-                    resultFieldNewEPS.setText("ERROR");
-                }
 
-                double result = (oldEps * (sharesBefore*1000)) / (sharesAfter*1000);
+    private void keyFireTERP(KeyEvent ev) {
+        if (ev.getCode() == KeyCode.ENTER) {
+            calculateTERPBtn.fire();
+            ev.consume(); 
+        }
+    }
 
-                String resultString = decfor.format(result);
 
-                resultFieldNewEPS.setText(resultString);
-                StringSelection stringSelection = new StringSelection(resultString);
-                java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(stringSelection, null);
-            }
-        });
+    private void keyFireDEPS(KeyEvent ev) {
+        if (ev.getCode() == KeyCode.ENTER) {
+            calculateDEPSBtn.fire();
+            ev.consume();
+        }
+    }
 
-        depsPane.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
-            if (ev.getCode() == KeyCode.ENTER) {
-                calculateDEPSBtn.fire();
-                ev.consume();
-            }
-        });
 
-        terpPane.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
-            if (ev.getCode() == KeyCode.ENTER) {
-                calculateTERPBtn.fire();
-                ev.consume(); 
-            }
-        });
+    private void calculateNEPS() {
+        try {
+            oldEps = Double.parseDouble(oldEpsField.getText());
+            sharesBefore = Double.parseDouble(sharesBeforeField.getText());
+            sharesAfter = Double.parseDouble(sharesAfterField.getText());
+        } catch (Exception e) {
+            resultFieldNewEPS.setText("ERROR");
+        }
+        double result = (oldEps * (sharesBefore*1000)) / (sharesAfter*1000);
+        String resultString = decfor.format(result);
+        resultFieldNewEPS.setText(resultString);
+        StringSelection stringSelection = new StringSelection(resultString);
+        java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
 
-        nepsPane.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
-            if (ev.getCode() == KeyCode.ENTER) {
-                calculateNewEPSBtn.fire();
-                ev.consume(); 
-            }
-        });
+
+    private void caclulateDEPS() {
+        try {
+            eps0 = Double.parseDouble(eps0Field.getText());
+            eps2 = Double.parseDouble(eps2Field.getText());
+        } catch (Exception e) {
+            resultFieldDEPS.setText("ERROR");
+        }
+        double result = ((eps0-eps2) / (eps0*2));
+        String resultString = decfor.format(result);
+        resultFieldDEPS.setText(resultString);
+        StringSelection stringSelection = new StringSelection(resultString);
+        java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+
+    private void calculateTERP() {
+        try {
+            s0 = Double.parseDouble(s0Field.getText());
+            s1 = Double.parseDouble(s1Field.getText());
+            p0 = Double.parseDouble(p0Field.getText());
+            p1 = Double.parseDouble(p1Field.getText());
+        } catch (Exception e) {
+            resultFieldTERP.setText("ERROR");
+        }
+        double result = ((s0*1000) * p0 + (s1*1000) * p1) / (s0 + s1);
+        String resultString = decfor.format(result);
+        resultFieldTERP.setText(resultString);
+        StringSelection stringSelection = new StringSelection(resultString);
+        java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+
+    private void depsLink() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.investopedia.com/terms/d/dilutedeps.asp"));
+        } catch (IOException e) {
+            System.out.println("Page not found");
+        } catch (URISyntaxException e) {
+            System.out.println("Page not found");
+        }
+    }
+
+
+    private void terpLink() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.investopedia.com/terms/t/theoreticalexrightsprice.asp"));
+        } catch (IOException | URISyntaxException e) {
+            System.out.println("Page not found");
+        } 
     }
 
     

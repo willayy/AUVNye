@@ -6,10 +6,11 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch)",
+            "name": "AUVNyeApp",
             "request": "launch",
             "mainClass": "AUVNyeApp",
-            "vmArgs": "--module-path C:/Java/javafx-sdk-20.0.1/lib --add-modules javafx.controls,javafx.fxml"
+            "projectName": "AUVNye_79c7b022",
+            "vmArgs": "--module-path AUVNye/AUVNyeSourceCode/lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }

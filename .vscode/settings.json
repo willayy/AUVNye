@@ -1,0 +1,21 @@
+{
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "AUVNyeSourceCode/lib/javafx.base.jar",
+            "AUVNyeSourceCode/lib/javafx.controls.jar",
+            "AUVNyeSourceCode/lib/javafx.fxml.jar",
+            "AUVNyeSourceCode/lib/javafx.graphics.jar",
+            "AUVNyeSourceCode/lib/javafx.media.jar",
+            "AUVNyeSourceCode/lib/javafx.swing.jar",
+            "AUVNyeSourceCode/lib/javafx.web.jar",
+            "AUVNyeSourceCode/lib/javafx-swt.jar"
+        ],
+        "exclude": [
+            "c:\\Java\\javafx-sdk-20.0.1\\lib\\javafx-swt.jar"
+        ]
+    },
+    "java.project.sourcePaths": [
+        "AUVNyeSourceCode\\src"
+    ]
+}
