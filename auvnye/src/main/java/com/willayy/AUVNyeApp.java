@@ -1,3 +1,4 @@
+package com.willayy;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,9 +12,9 @@ public class AUVNyeApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("UserInterface.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserInterface.fxml"));
         Parent parent = loader.load();
-
+        
         Scene scene = new Scene(parent, 450, 450);
         
         stage.setMaxWidth(450);
@@ -21,7 +22,7 @@ public class AUVNyeApp extends Application {
         stage.setMinWidth(450);
         stage.setMinHeight(450);
         stage.setScene(scene);
-        stage.getIcons().add(new Image("AUVNyeIcon.png"));
+        stage.getIcons().add(new Image("/img/AUVNyeIcon.png"));
         stage.show();
     }
 
