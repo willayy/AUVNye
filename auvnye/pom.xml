@@ -71,7 +71,17 @@
 
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
+          <configuration>
+            <outputDirectory>out/</outputDirectory>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>${mainClass}</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
 
         <plugin>
@@ -100,7 +110,7 @@
          <artifactId>javafx-maven-plugin</artifactId>
          <version>${javafx.maven.plugin.version}</version>
           <configuration>
-            <mainClass>com.willayy.AUVNyeApp</mainClass>
+            <mainClass>${mainClass}</mainClass>
           </configuration>
         </plugin>
 
